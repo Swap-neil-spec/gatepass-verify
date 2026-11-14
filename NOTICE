@@ -1,0 +1,14 @@
+gatepass-verify
+Copyright 2026 GatePass
+
+This product includes unchanged test material from public specifications:
+
+- HAPS v0.4 test vectors, Copyright iProov, Apache License 2.0.
+  https://github.com/iProov/HAPS
+- ACTION-v1 test vectors, Copyright 2026 Aqta Technologies Ltd, Apache License 2.0.
+  The ACTION-v1 specification text is CC-BY-4.0.
+  https://github.com/Aqta-ai/attestation-spec
+- Sample flight log and public key from agent-flight-recorder, Copyright (c) 2026 Mihirajmera, MIT License.
+  https://github.com/Mihirajmera/agent-flight-recorder
+
+Keel permit fixtures in this repository were written here from the public permit profile and the published authority-envelope.v0 comparator. They are not copied from a Keel test vector.

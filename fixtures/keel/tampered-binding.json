@@ -1,0 +1,134 @@
+{
+  "profile": "draft-munoz-scitt-permit-profile-01",
+  "comparator": "authority-envelope.v0",
+  "permits": [
+    {
+      "id": "22222222-2222-4222-8222-222222222222",
+      "project_id": "11111111-1111-4111-8111-111111111111",
+      "decision": "allow",
+      "reason": "playbook allows a treasury transfer",
+      "actions_json": [],
+      "subject_type": "agent",
+      "subject_id": "treasury-ops",
+      "action_name": "payment.transfer",
+      "resource_provider": "treasury",
+      "resource_model": "ops-1",
+      "estimated_input_tokens": 0,
+      "estimated_output_tokens": 0,
+      "request_fingerprint": "c9006b4e456f6ee6d45c2379709b2dd197de340be2f3d17b7847abf24219e287",
+      "idempotency_key": "22222222-2222-4222-8222-222222222222",
+      "policy_id": "treasury-wire",
+      "policy_version": "1",
+      "created_at": "2026-05-01T00:00:00Z",
+      "binding_request_hash": "c7ef72575cc338fe1e5ef72178ca6eb81200d318a39a1df77c670b4c57a7e0c5",
+      "delegation_depth": 0,
+      "authority_envelope": {
+        "actions": [
+          "payment.transfer"
+        ],
+        "tools": [
+          "bank.transfer"
+        ],
+        "providers": [
+          "treasury"
+        ],
+        "models": [
+          "ops-1"
+        ],
+        "data_classes": [
+          "account"
+        ],
+        "regions": [
+          "eu",
+          "us"
+        ],
+        "expires_at": "2026-12-31T00:00:00Z"
+      },
+      "authority_envelope_version": "authority-envelope.v0",
+      "expires_at": "2026-12-31T00:00:00Z",
+      "decision_details": {
+        "decision": "allow",
+        "code": "policy.allow",
+        "reason": "playbook allows a treasury transfer",
+        "approver": "R. Okonkwo",
+        "gate": "decision"
+      },
+      "status": "bound"
+    },
+    {
+      "id": "33333333-3333-4333-8333-333333333333",
+      "project_id": "11111111-1111-4111-8111-111111111111",
+      "decision": "allow",
+      "reason": "payroll transfer inside the parent regions",
+      "actions_json": [],
+      "subject_type": "agent",
+      "subject_id": "treasury-ops",
+      "action_name": "payment.transfer",
+      "resource_provider": "treasury",
+      "resource_model": "ops-1",
+      "estimated_input_tokens": 0,
+      "estimated_output_tokens": 0,
+      "request_fingerprint": "9b12930db9e2428c62b0baef4c331cc3fc83757c7f3a3c01fdd2c7d8d08a053c",
+      "idempotency_key": "33333333-3333-4333-8333-333333333333",
+      "policy_id": "treasury-wire",
+      "policy_version": "1",
+      "created_at": "2026-05-01T00:00:00Z",
+      "binding_request_hash": "336f877f31e5dd0b0d75eeccb381b1c8a6cfb2ac96caee55adc68d4b1e0bcfbb",
+      "parent_permit_id": "22222222-2222-4222-8222-222222222222",
+      "delegation_depth": 1,
+      "authority_envelope": {
+        "actions": [
+          "payment.transfer"
+        ],
+        "tools": [
+          "bank.transfer"
+        ],
+        "providers": [
+          "treasury"
+        ],
+        "models": [
+          "ops-1"
+        ],
+        "data_classes": [
+          "account"
+        ],
+        "regions": [
+          "eu"
+        ],
+        "expires_at": "2026-12-31T00:00:00Z"
+      },
+      "authority_envelope_version": "authority-envelope.v0",
+      "expires_at": "2026-12-31T00:00:00Z",
+      "decision_details": {
+        "decision": "allow",
+        "code": "policy.allow",
+        "reason": "payroll transfer inside the parent regions",
+        "approver": "R. Okonkwo",
+        "gate": "decision"
+      },
+      "status": "bound"
+    }
+  ],
+  "revocations": [],
+  "requests": {
+    "22222222-2222-4222-8222-222222222222": {
+      "tool": "bank.transfer",
+      "arguments": {
+        "amount": "100.00",
+        "currency": "USD",
+        "destination": "acct-operating"
+      }
+    },
+    "33333333-3333-4333-8333-333333333333": {
+      "tool": "bank.transfer",
+      "arguments": {
+        "amount": "40.00",
+        "currency": "USD",
+        "destination": "acct-payroll"
+      }
+    }
+  },
+  "keys": {
+    "fixture": "yg7w5seIECPUKQZfD6eTrluxblWJg3qrcSPe40Duap4"
+  }
+}

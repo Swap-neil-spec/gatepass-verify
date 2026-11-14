@@ -1,0 +1,24 @@
+{
+  "profile": "action-v1",
+  "args": {
+    "merge_method": "squash",
+    "pull_number": 18
+  },
+  "record": {
+    "v": "action-1",
+    "action_id": "55555555-5555-4555-8555-555555555555",
+    "org_id": "org-fixture",
+    "session_id": "sess-fixture",
+    "intent_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "agent": "fixture-caller",
+    "tool": "github.merge_pull_request",
+    "args_hash": "b10c69a12ee27145133b676152fa21665d87f7aad2f772e2aee4446e592411cd",
+    "outcome": "ALLOWED",
+    "policy_applied": [
+      "production_change_review"
+    ],
+    "timestamp": "2026-08-22T14:03:11Z",
+    "public_key": "yg7w5seIECPUKQZfD6eTrluxblWJg3qrcSPe40Duap4",
+    "signature": "Ol4t_C2BC9nT-Xgpgsx3UNg886klHNnBml-aQ55JU2_Zfu-Ul47oK4MChKp1dRLL_cE1nftZRu9TxaImceCVCw"
+  }
+}

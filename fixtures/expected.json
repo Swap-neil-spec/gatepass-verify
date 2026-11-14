@@ -1,0 +1,124 @@
+{
+  "cases": [
+    {
+      "file": "fixtures/keel/narrow.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid", "valid"]
+    },
+    {
+      "file": "fixtures/keel/equal.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid", "valid"]
+    },
+    {
+      "file": "fixtures/keel/widened.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid", "widened"]
+    },
+    {
+      "file": "fixtures/keel/tampered-binding.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid", "tampered"]
+    },
+    {
+      "file": "fixtures/keel/revoked-parent.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["revoked", "revoked"]
+    },
+    {
+      "file": "fixtures/keel/expired.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["expired", "expired"]
+    },
+    {
+      "file": "fixtures/keel/pending.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/keel/denied.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/keel/malformed.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["malformed"]
+    },
+    {
+      "file": "fixtures/haps/valid.json",
+      "now": "2026-01-09T00:01:00Z",
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/haps/tampered-args.json",
+      "now": "2026-01-09T00:01:00Z",
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/haps/expired.json",
+      "now": "2026-01-09T00:03:00Z",
+      "verdicts": ["expired"]
+    },
+    {
+      "file": "fixtures/haps/malformed.json",
+      "now": "2026-01-09T00:01:00Z",
+      "verdicts": ["malformed"]
+    },
+    {
+      "file": "fixtures/action/args-match.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/action/args-mismatch.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/action/published/001-allowed.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/action/published/002-blocked.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/action/published/001-tampered-signature.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/action/published/002-tampered-outcome.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/action/published/004-missing-field.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["malformed"]
+    },
+    {
+      "file": "fixtures/action/published/005-unknown-field.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["malformed"]
+    },
+    {
+      "file": "fixtures/afr/published/flight.jsonl",
+      "key": ["afr=fixtures/afr/published/signing.pub"],
+      "verdicts": ["valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid", "valid"]
+    },
+    {
+      "file": "fixtures/afr/published/flight-tampered.jsonl",
+      "key": ["afr=fixtures/afr/published/signing.pub"],
+      "verdicts": ["valid", "valid", "valid", "valid", "tampered", "tampered", "tampered", "tampered", "tampered", "tampered", "tampered", "tampered", "tampered", "tampered", "tampered", "tampered"]
+    },
+    {
+      "file": "fixtures/afr/broken.jsonl",
+      "key": ["afr=fixtures/afr/published/signing.pub"],
+      "verdicts": ["valid", "malformed", "tampered"]
+    }
+  ]
+}

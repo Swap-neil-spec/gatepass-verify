@@ -1,0 +1,54 @@
+{
+  "name": "gatepass-verify",
+  "version": "0.1.0",
+  "description": "Offline verifier for authorization receipts in several published formats.",
+  "type": "module",
+  "bin": {
+    "gatepass-verify": "bin/gatepass-verify.js"
+  },
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    }
+  },
+  "files": [
+    "dist/src",
+    "bin",
+    "schema",
+    "README.md",
+    "LICENSE",
+    "NOTICE",
+    "SECURITY.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Swap-neil-spec/gatepass-verify.git"
+  },
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint . && node scripts/check-source.mjs",
+    "test": "npm run build && node --test dist/test/verify.test.js dist/test/cli.test.js",
+    "prepublishOnly": "npm run build && npm test",
+    "prepack": "npm run build",
+    "fixtures": "node scripts/build-fixtures.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.16.0",
+    "@types/node": "^22.20.5",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.0"
+  }
+}
