@@ -8,6 +8,34 @@ npx gatepass-verify fixtures/keel/narrow.json --now 2026-06-01T00:00:00Z
 
 The command does not use the network. It reads the file you pass and prints a verdict.
 
+## Why
+
+An authorization receipt is only useful if anyone can check it later, without sending the file to the issuer. gatepass-verify reads one local file, detects the format or honors `--format`, and prints one verdict per record.
+
+A Keel child permit that is broader than its parent is `widened`. A broken hash, signature, or argument binding is `tampered`. A signed `permit.revoked` event that covers a permit or its parent is `revoked`. A record past its expiry at the verification clock is `expired`. Input this tool cannot parse, or a format it does not implement, is `malformed`. The process exits 0 only when every record is `valid`. Other verdicts exit 2 through 6, in the order listed under Exit codes. A rejected file exits 1.
+
+This package is a neutral verifier for the four published formats below. It does not yet verify GatePass Decision Records. Support for that format is planned for a later release.
+
+```mermaid
+flowchart TD
+  A[Receipt file] --> B[gatepass-verify]
+  B --> C{Format}
+  C -->|Keel Permit| D[Required fields, request binding, child attenuation, signed revocation, expiry]
+  C -->|HAPS v0.4| E[Intent hash, audience, expiry, optional EdDSA]
+  C -->|ACTION-v1| F[Canonical payload, embedded signature, optional args hash]
+  C -->|AFR chain| G[Entry hashes, prev links, optional Ed25519]
+  D --> H{Verdict}
+  E --> H
+  F --> H
+  G --> H
+  H -->|valid| I[Exit 0]
+  H -->|tampered| J[Exit 2]
+  H -->|revoked| K[Exit 3]
+  H -->|widened| L[Exit 4]
+  H -->|expired| M[Exit 5]
+  H -->|malformed| N[Exit 6]
+```
+
 ## Verdicts
 
 | Code | Label | Meaning |
@@ -116,3 +144,7 @@ npm run smoke
 ```
 
 `npm test` typechecks through the build, then runs the unit tests. `npm run smoke` packs a tarball, installs it in a clean directory, and runs the installed command against every fixture.
+
+## Maintainer
+
+Swapnil (Neil) Gaikwad. Report a verification bypass to security@usegatepass.com.
