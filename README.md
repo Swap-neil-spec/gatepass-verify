@@ -147,4 +147,4 @@ npm run smoke
 
 ## Maintainer
 
-Swapnil (Neil) Gaikwad. Report a verification bypass to security@usegatepass.com.
+Swapnil Rajkumar Gaikwad (Neil). Report a verification bypass to security@usegatepass.com.
