@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, statSync } from "node:fs";
+import { mkdtempSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { pathToFileURL, fileURLToPath } from "node:url";
@@ -15,6 +15,7 @@ const tarballName = (Array.isArray(packedInfo) ? packedInfo[0] : packedInfo).fil
 const tarball = join(root, tarballName);
 const bytes = statSync(tarball).size;
 const dir = mkdtempSync(join(tmpdir(), "gatepass-verify-"));
+writeFileSync(join(dir, "package.json"), JSON.stringify({ name: "gatepass-verify-smoke", version: "0.0.0", private: true }));
 const installed = spawnSync("npm", ["install", "--ignore-scripts", tarball], {
   cwd: dir,
   encoding: "utf8",
