@@ -1,8 +1,14 @@
 import { readFileSync, statSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { formatText, exitCode } from "./result.js";
 import { DEFAULT_MAX_BYTES } from "./text.js";
 import type { FormatSelection, VerifyOptions } from "./types.js";
 import { verify } from "./verify.js";
+
+const PACKAGE_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+export const SAMPLE_RELATIVE = "fixtures/keel/narrow.json";
+export const SAMPLE_NOW = new Date("2026-06-01T00:00:00Z");
 
 const FORMATS = new Set(["auto", "keel-permit", "haps", "action-v1", "afr"]);
 
@@ -40,11 +46,15 @@ export async function main(argv: readonly string[], io: CliIo = defaultIo): Prom
     return 0;
   }
 
+  const file = parsed.sample ? join(PACKAGE_ROOT, SAMPLE_RELATIVE) : parsed.file;
+  const label = parsed.sample ? SAMPLE_RELATIVE : parsed.file;
+  if (parsed.sample && !parsed.now) parsed.now = SAMPLE_NOW;
+
   let size = 0;
   try {
-    size = statSync(parsed.file).size;
+    size = statSync(file).size;
   } catch {
-    io.stderr(`cannot read ${parsed.file}\n`);
+    io.stderr(`cannot read ${file}\n`);
     return 1;
   }
   if (size > parsed.maxBytes) {
@@ -54,9 +64,9 @@ export async function main(argv: readonly string[], io: CliIo = defaultIo): Prom
 
   let bytes: Buffer;
   try {
-    bytes = io.readFile(parsed.file);
+    bytes = io.readFile(file);
   } catch {
-    io.stderr(`cannot read ${parsed.file}\n`);
+    io.stderr(`cannot read ${file}\n`);
     return 1;
   }
 
@@ -77,7 +87,7 @@ export async function main(argv: readonly string[], io: CliIo = defaultIo): Prom
 
   const result = verify(bytes, options);
   if (parsed.json) io.stdout(`${JSON.stringify(result, null, 2)}\n`);
-  else io.stdout(formatText(result, parsed.file));
+  else io.stdout(formatText(result, label));
   return exitCode(result);
 }
 
@@ -91,6 +101,7 @@ interface ParsedArgs {
   maxBytes: number;
   help: boolean;
   version: boolean;
+  sample: boolean;
 }
 
 function parseArgs(argv: readonly string[]): ParsedArgs | { error: string } {
@@ -102,11 +113,13 @@ function parseArgs(argv: readonly string[]): ParsedArgs | { error: string } {
   let audience: string | undefined;
   let help = false;
   let version = false;
+  let sample = false;
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i]!;
     if (arg === "--json") json = true;
     else if (arg === "--help" || arg === "-h") help = true;
     else if (arg === "--version") version = true;
+    else if (arg === "--sample") sample = true;
     else if (arg === "--format") {
       const value = argv[i + 1];
       if (!value || !FORMATS.has(value)) return { error: "format must be auto, keel-permit, haps, action-v1, or afr" };
@@ -138,10 +151,11 @@ function parseArgs(argv: readonly string[]): ParsedArgs | { error: string } {
     } else file = arg;
   }
   if (help || version) {
-    return { file: "", json, format, keys, maxBytes: DEFAULT_MAX_BYTES, help, version };
+    return { file: "", json, format, keys, maxBytes: DEFAULT_MAX_BYTES, help, version, sample };
   }
-  if (!file) return { error: "a file is required" };
-  const parsed: ParsedArgs = { file, json, format, keys, maxBytes: DEFAULT_MAX_BYTES, help, version };
+  if (sample && file) return { error: "pass --sample or a file, not both" };
+  if (!file && !sample) return { error: "a file is required, or pass --sample" };
+  const parsed: ParsedArgs = { file, json, format, keys, maxBytes: DEFAULT_MAX_BYTES, help, version, sample };
   if (now) parsed.now = now;
   if (audience) parsed.audience = audience;
   return parsed;
@@ -151,9 +165,12 @@ function usage(): string {
   return [
     "gatepass-verify <file> [--json] [--format auto|keel-permit|haps|action-v1|afr]",
     "                   [--now <iso>] [--key <id>=<path>] [--aud <audience>]",
+    "gatepass-verify --sample [--json] [--now <iso>]",
     "",
     "Read one receipt file and print a verdict for each record.",
     "The process does not use the network.",
+    "--sample checks the Keel permit shipped with this package.",
+    "If --now is omitted, --sample uses 2026-06-01T00:00:00Z.",
     "",
     "Exit codes:",
     "  0  every record is valid",

@@ -18,10 +18,13 @@
     "dist/src",
     "bin",
     "schema",
+    "fixtures/keel/narrow.json",
     "README.md",
     "LICENSE",
     "NOTICE",
-    "SECURITY.md"
+    "SECURITY.md",
+    "CHANGELOG.md",
+    "CITATION.cff"
   ],
   "engines": {
     "node": ">=20"

@@ -11,6 +11,8 @@ First release of the offline verifier.
 
 ### Added
 
+- `gatepass-verify --sample` checks a Keel permit shipped in the package, so the first command works after an install, without a repository checkout. If `--now` is omitted, the sample uses 2026-06-01T00:00:00Z.
+- CITATION.cff and CHANGELOG.md are included in the published package.
 - `gatepass-verify` command and `verify()` library entry that read one file or a buffer and return one verdict per record, with no network access and no runtime dependencies.
 - Experimental interop for Keel Permit (`authority-envelope.v0`), including request binding, child attenuation on the v0 set fields, signed `permit.revoked` events, and expiry against `--now` or the local clock.
 - Experimental interop for HAPS v0.4, ACTION-v1, and agent-flight-recorder hash chains, as described in the README format table.

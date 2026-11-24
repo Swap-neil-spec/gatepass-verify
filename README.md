@@ -3,10 +3,22 @@
 Offline checks for authorization receipts. One file in, one verdict per record.
 
 ```bash
-npx gatepass-verify fixtures/keel/narrow.json --now 2026-06-01T00:00:00Z
+npx gatepass-verify --sample
 ```
 
-The command does not use the network. It reads the file you pass and prints a verdict.
+The command does not use the network. It checks a sample Keel permit shipped with the package, using a fixed clock of 2026-06-01T00:00:00Z, and prints one verdict per record. Exit 0 means every record is valid.
+
+This tool checks a receipt you already have. It does not sit in front of a tool call, and it does not open a network connection.
+
+To check your own file:
+
+```bash
+npx gatepass-verify path/to/receipt.json
+```
+
+Pass `--now` when you want a chosen verification clock. For a file you pass yourself, the default clock is the machine clock. For `--sample`, the default is the fixed clock above, unless you pass `--now`.
+
+From a checkout of this repository, the same sample file is also at `fixtures/keel/narrow.json`.
 
 ## Why
 
@@ -117,6 +129,8 @@ const result: VerifyResult = verify(bytes, {
 
 ## Fixtures
 
+`fixtures/keel/narrow.json` is the file `--sample` checks. It is included in the published package. The other fixtures stay in the repository for tests and are not packed.
+
 `fixtures/expected.json` is the file-to-verdict list the tests run.
 
 Keel attenuation files in `fixtures/keel/` were built for this verifier from the public permit v1 and `authority-envelope.v0` rules. They are not Keel-published test vectors. The signing key is derived from a public string and is written into those files. Do not use it for a real record.
@@ -144,6 +158,10 @@ npm run smoke
 ```
 
 `npm test` typechecks through the build, then runs the unit tests. `npm run smoke` packs a tarball, installs it in a clean directory, and runs the installed command against every fixture.
+
+## Cite
+
+See [CITATION.cff](CITATION.cff) for the citation file. The author name is Swapnil Rajkumar Gaikwad.
 
 ## Maintainer
 

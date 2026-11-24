@@ -66,7 +66,36 @@ describe("cli", () => {
     const result = run(["--help"]);
     assert.equal(result.status, 0);
     assert.match(result.stdout, /Exit codes/);
+    assert.match(result.stdout, /--sample/);
   });
+
+  it("checks the shipped sample from another working directory", () => {
+    const result = spawnSync(process.execPath, [bin, "--sample"], {
+      cwd: "/tmp",
+      encoding: "utf8",
+    });
+    assert.equal(result.status, 0);
+    assert.match(result.stdout, /Valid/);
+    assert.match(result.stdout, /fixtures\/keel\/narrow\.json/);
+  });
+
+  it("lets --sample print JSON", () => {
+    const result = spawnSync(process.execPath, [bin, "--sample", "--json"], {
+      cwd: "/tmp",
+      encoding: "utf8",
+    });
+    const parsed = JSON.parse(result.stdout) as VerifyResult;
+    assert.equal(result.status, 0);
+    assert.equal(parsed.ok, true);
+    assert.equal(parsed.records.every((record) => record.verdict === "valid"), true);
+  });
+
+  it("refuses --sample together with a file", () => {
+    const result = run(["--sample", "fixtures/keel/narrow.json"]);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, /pass --sample or a file/);
+  });
+
 });
 
 describe("cli matches the library on every fixture", () => {
