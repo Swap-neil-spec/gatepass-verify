@@ -1,0 +1,24 @@
+{
+  "title": "gatepass-verify: an offline verifier for authorization receipts",
+  "description": "Offline command and library that reads one authorization receipt and prints one verdict per record. Experimental interop for Keel Permit, HAPS v0.4, ACTION-v1, and agent-flight-recorder. Apache-2.0. No runtime dependencies.",
+  "upload_type": "software",
+  "access_right": "open",
+  "license": "Apache-2.0",
+  "version": "0.1.0",
+  "creators": [
+    {
+      "name": "Gaikwad, Swapnil Rajkumar",
+      "affiliation": "Independent",
+      "orcid": "0009-0003-8694-2786"
+    }
+  ],
+  "keywords": [
+    "authorization",
+    "receipts",
+    "verification",
+    "keel-permit",
+    "HAPS",
+    "ACTION-v1",
+    "ed25519"
+  ]
+}
