@@ -7,5 +7,6 @@ Open an issue or a pull request against https://github.com/Swap-neil-spec/gatepa
 - Say what a check does and what it does not do, in the README format table.
 - Do not describe an experimental parser as certified or compliant.
 - Run `npm test` and `npm run lint` before sending a change.
+- Releases are staged on npm and approved by the maintainer. See RELEASING.md.
 
 Questions about a bug in verification can go to security@usegatepass.com when the bug would accept a bad receipt.

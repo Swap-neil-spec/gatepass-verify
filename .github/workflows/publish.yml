@@ -1,10 +1,14 @@
-# Publishes gatepass-verify to npm with provenance when a v* tag is pushed.
+# Stages a gatepass-verify release on npm when a v* tag is pushed.
 #
-# Auth today: an NPM_TOKEN repository secret.
-# To move to npm trusted publishing (OIDC), register this repository and
-# workflow (publish.yml, environment npm) as the trusted publisher on npmjs.com,
-# then delete the NODE_AUTH_TOKEN line below and the NPM_TOKEN secret.
-# Nothing else changes: id-token: write is already granted.
+# Releases are staged, not published directly. This workflow authenticates
+# to npm through trusted publishing (OIDC), with no stored token, and runs
+# `npm stage publish`. The version stays private until the maintainer reviews
+# and approves it with 2FA on npmjs.com (Staged Packages) or with
+# `npm stage approve <stage-id>`. npm adds provenance automatically for
+# trusted publishing from GitHub Actions on a public repository.
+#
+# Trusted publisher on npmjs.com: Swap-neil-spec/gatepass-verify,
+# workflow publish.yml, environment npm.
 
 name: publish
 
@@ -25,13 +29,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: npm
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           registry-url: https://registry.npmjs.org
-      # Trusted publishing needs npm 11.5.1 or later.
+          package-manager-cache: false
+      # Staged publishing needs npm 11.15.0 or later and Node 22.14.0 or later.
       - run: npm install -g npm@latest
+      - run: node --version && npm --version
       - name: Check tag matches package version
         run: |
           version="$(node -p "require('./package.json').version")"
@@ -42,6 +48,4 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm test
-      - run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - run: npm stage publish --provenance --access public

@@ -1,6 +1,6 @@
 {
   "name": "gatepass-verify",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Offline verifier for authorization receipts in several published formats.",
   "type": "module",
   "bin": {
