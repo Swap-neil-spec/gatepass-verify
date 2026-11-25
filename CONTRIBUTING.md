@@ -4,7 +4,7 @@ Open an issue or a pull request against https://github.com/Swap-neil-spec/gatepa
 
 - Keep the package free of runtime dependencies. Use `node:crypto` for hashes and signatures.
 - Add a fixture and a test for a new verdict. Update `fixtures/expected.json`.
-- Say what a check does and what it does not do, in the README format table.
+- Say what a check does and what it does not do, in the README format table and in [docs/receipts.md](docs/receipts.md) when the rule is longer than a row.
 - Do not describe an experimental parser as certified or compliant.
 - Run `npm test` and `npm run lint` before sending a change.
 - Releases are staged on npm and approved by the maintainer. See RELEASING.md.

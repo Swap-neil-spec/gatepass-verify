@@ -1,0 +1,52 @@
+{
+  "profile": "gatepass-decision-record",
+  "records": [
+    {
+      "id": "rec-old",
+      "alg": "Ed25519",
+      "publicKey": "Vt8ZHbm0bgId_4rUlkB3atLl1JzjTdYWtcgunMN7z8k",
+      "issuedAt": "2026-06-01T00:00:00Z",
+      "expiresAt": "2026-12-01T00:00:00Z",
+      "approver": {
+        "id": "person-1"
+      },
+      "approved": {
+        "tool": "fs.write",
+        "argsHash": "579182b00c7c9448d3ddca968077475daa2f01f23a95ae93e837950bf86e39f2",
+        "resolvedPathHash": "b79c77c27270e85599562ea895d93531a1013a652dff6e3a6e6321097519294f",
+        "toolDefinitionHash": "ef392b4f0cb92429e466ff4e98f99bda8d6de5ae22075317e47b31579b487dae"
+      },
+      "executed": {
+        "tool": "fs.write",
+        "argsHash": "579182b00c7c9448d3ddca968077475daa2f01f23a95ae93e837950bf86e39f2",
+        "resolvedPathHash": "b79c77c27270e85599562ea895d93531a1013a652dff6e3a6e6321097519294f",
+        "toolDefinitionHash": "ef392b4f0cb92429e466ff4e98f99bda8d6de5ae22075317e47b31579b487dae",
+        "amount": 1000,
+        "currency": "USD",
+        "count": 1
+      },
+      "mandate": {
+        "id": "mandate-1",
+        "scopes": [
+          "fs.write"
+        ],
+        "caps": {
+          "amount": 5000,
+          "currency": "USD",
+          "count": 4
+        },
+        "expiresAt": "2026-05-01T00:00:00Z",
+        "publicKey": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "RiTWpH3eYt08mDxW71gskKmWkJ0ojpCbQpU-w1NQ-vk",
+          "y": "J1LZEIoEjb98HlPoJQxglsiakLmaCknCwt6ThrKJAdM"
+        },
+        "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiQ2d2OEZwOE4waWVURzVrQ1MxdTZqblh2Y3VYWXdWdGV2eEszd1M3NVFtMCIsIm9yaWdpbiI6Imh0dHBzOi8vZ2F0ZS5leGFtcGxlIn0",
+        "authenticatorData": "HJ5TRISLXnRkMWiuSwUxVd4DwwpKZ2haH_kEFSxSUUEFAAAAAQ",
+        "signature": "z_M4EFXLg1-mxibNGQmgZG_GPc4ItIzRwch-q490ZEduDb5SS5yxvWaBlyzijV0ZaTJqnX_Mrfg10ZqCqmdWQA"
+      },
+      "signature": "NEFCvepisg16Su2cS2Hqrm05F9gDPXu-h5KkgVWRE60kH3fuC2k0lvQ8SZKxygP21WFPt32pGR6_YIIN-o4yCA"
+    }
+  ]
+}

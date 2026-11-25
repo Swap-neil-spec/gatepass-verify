@@ -1,6 +1,7 @@
 import { readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { evidenceFrom, formatEvidence } from "./evidence.js";
 import { formatText, exitCode } from "./result.js";
 import { DEFAULT_MAX_BYTES } from "./text.js";
 import type { FormatSelection, VerifyOptions } from "./types.js";
@@ -10,7 +11,17 @@ const PACKAGE_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 export const SAMPLE_RELATIVE = "fixtures/keel/narrow.json";
 export const SAMPLE_NOW = new Date("2026-06-01T00:00:00Z");
 
-const FORMATS = new Set(["auto", "keel-permit", "haps", "action-v1", "afr"]);
+const FORMATS = new Set([
+  "auto",
+  "keel-permit",
+  "haps",
+  "action-v1",
+  "afr",
+  "ap2",
+  "verifiable-intent",
+  "gatepass",
+]);
+const FORMAT_LIST = "auto, keel-permit, haps, action-v1, afr, ap2, verifiable-intent, or gatepass";
 
 export interface CliIo {
   stdout: (text: string) => void;
@@ -42,7 +53,7 @@ export async function main(argv: readonly string[], io: CliIo = defaultIo): Prom
     return 0;
   }
   if (parsed.version) {
-    io.stdout("gatepass-verify 0.1.0\n");
+    io.stdout(`gatepass-verify ${packageVersion()}\n`);
     return 0;
   }
 
@@ -85,10 +96,26 @@ export async function main(argv: readonly string[], io: CliIo = defaultIo): Prom
   if (Object.keys(keys).length > 0) options.keys = keys;
   if (parsed.audience) options.audience = parsed.audience;
 
+  if (!options.now) options.now = new Date();
   const result = verify(bytes, options);
+  if (parsed.evidence) {
+    const bundle = evidenceFrom(bytes, result, options.now);
+    if (parsed.json) io.stdout(`${JSON.stringify(bundle, null, 2)}\n`);
+    else io.stdout(formatEvidence(bundle, label));
+    return exitCode(result);
+  }
   if (parsed.json) io.stdout(`${JSON.stringify(result, null, 2)}\n`);
   else io.stdout(formatText(result, label));
   return exitCode(result);
+}
+
+function packageVersion(): string {
+  try {
+    const parsed = JSON.parse(readFileSync(join(PACKAGE_ROOT, "package.json"), "utf8")) as { version?: string };
+    return parsed.version ?? "0.0.0";
+  } catch {
+    return "0.0.0";
+  }
 }
 
 interface ParsedArgs {
@@ -102,6 +129,7 @@ interface ParsedArgs {
   help: boolean;
   version: boolean;
   sample: boolean;
+  evidence: boolean;
 }
 
 function parseArgs(argv: readonly string[]): ParsedArgs | { error: string } {
@@ -114,15 +142,17 @@ function parseArgs(argv: readonly string[]): ParsedArgs | { error: string } {
   let help = false;
   let version = false;
   let sample = false;
+  let evidence = false;
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i]!;
     if (arg === "--json") json = true;
     else if (arg === "--help" || arg === "-h") help = true;
     else if (arg === "--version") version = true;
     else if (arg === "--sample") sample = true;
+    else if (arg === "--evidence") evidence = true;
     else if (arg === "--format") {
       const value = argv[i + 1];
-      if (!value || !FORMATS.has(value)) return { error: "format must be auto, keel-permit, haps, action-v1, or afr" };
+      if (!value || !FORMATS.has(value)) return { error: `format must be ${FORMAT_LIST}` };
       format = value as FormatSelection;
       i += 1;
     } else if (arg === "--now") {
@@ -151,11 +181,21 @@ function parseArgs(argv: readonly string[]): ParsedArgs | { error: string } {
     } else file = arg;
   }
   if (help || version) {
-    return { file: "", json, format, keys, maxBytes: DEFAULT_MAX_BYTES, help, version, sample };
+    return { file: "", json, format, keys, maxBytes: DEFAULT_MAX_BYTES, help, version, sample, evidence };
   }
   if (sample && file) return { error: "pass --sample or a file, not both" };
   if (!file && !sample) return { error: "a file is required, or pass --sample" };
-  const parsed: ParsedArgs = { file, json, format, keys, maxBytes: DEFAULT_MAX_BYTES, help, version, sample };
+  const parsed: ParsedArgs = {
+    file,
+    json,
+    format,
+    keys,
+    maxBytes: DEFAULT_MAX_BYTES,
+    help,
+    version,
+    sample,
+    evidence,
+  };
   if (now) parsed.now = now;
   if (audience) parsed.audience = audience;
   return parsed;
@@ -163,14 +203,17 @@ function parseArgs(argv: readonly string[]): ParsedArgs | { error: string } {
 
 function usage(): string {
   return [
-    "gatepass-verify <file> [--json] [--format auto|keel-permit|haps|action-v1|afr]",
+    "gatepass-verify <file> [--json] [--evidence]",
+    "                   [--format auto|keel-permit|haps|action-v1|afr|ap2|verifiable-intent|gatepass]",
     "                   [--now <iso>] [--key <id>=<path>] [--aud <audience>]",
-    "gatepass-verify --sample [--json] [--now <iso>]",
+    "gatepass-verify --sample [--json] [--evidence] [--now <iso>]",
     "",
     "Read one receipt file and print a verdict for each record.",
     "The process does not use the network.",
     "--sample checks the Keel permit shipped with this package.",
     "If --now is omitted, --sample uses 2026-06-01T00:00:00Z.",
+    "--evidence prints what was approved, by whom, when, what ran, the verdict, and why.",
+    "With --json, that bundle is JSON. Without --json, it is plain text.",
     "",
     "Exit codes:",
     "  0  every record is valid",

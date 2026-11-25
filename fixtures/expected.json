@@ -119,6 +119,129 @@
       "file": "fixtures/afr/broken.jsonl",
       "key": ["afr=fixtures/afr/published/signing.pub"],
       "verdicts": ["valid", "malformed", "tampered"]
+    },
+    {
+      "file": "fixtures/ap2/payment-valid.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["ap2=fixtures/ap2/issuer.public.jwk", "ap2-receipt=fixtures/ap2/receipt.public.jwk"],
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/ap2/payment-valid.txt",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["ap2=fixtures/ap2/issuer.public.jwk"],
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/ap2/payment-tampered.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["ap2=fixtures/ap2/issuer.public.jwk"],
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/ap2/payment-widened.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["ap2=fixtures/ap2/issuer.public.jwk"],
+      "verdicts": ["widened"]
+    },
+    {
+      "file": "fixtures/ap2/payment-expired.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["ap2=fixtures/ap2/issuer.public.jwk"],
+      "verdicts": ["expired"]
+    },
+    {
+      "file": "fixtures/ap2/payment-unknown-constraint.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["ap2=fixtures/ap2/issuer.public.jwk"],
+      "verdicts": ["widened"]
+    },
+    {
+      "file": "fixtures/ap2/checkout-valid.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["ap2=fixtures/ap2/issuer.public.jwk"],
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/ap2/checkout-widened.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["ap2=fixtures/ap2/issuer.public.jwk"],
+      "verdicts": ["widened"]
+    },
+    {
+      "file": "fixtures/ap2/malformed.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["malformed"]
+    },
+    {
+      "file": "fixtures/vi/immediate-valid.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["verifiable-intent=fixtures/vi/issuer.public.jwk"],
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/vi/immediate-tampered.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["verifiable-intent=fixtures/vi/issuer.public.jwk"],
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/vi/autonomous-valid.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["verifiable-intent=fixtures/vi/issuer.public.jwk"],
+      "verdicts": ["valid"]
+    },
+    {
+      "file": "fixtures/vi/autonomous-widened.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["verifiable-intent=fixtures/vi/issuer.public.jwk"],
+      "verdicts": ["widened"]
+    },
+    {
+      "file": "fixtures/vi/autonomous-expired.json",
+      "now": "2026-06-01T00:00:00Z",
+      "key": ["verifiable-intent=fixtures/vi/issuer.public.jwk"],
+      "verdicts": ["expired"]
+    },
+    {
+      "file": "fixtures/vi/malformed.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["malformed"]
+    },
+    {
+      "file": "fixtures/gatepass/chain-valid.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["valid", "valid"]
+    },
+    {
+      "file": "fixtures/gatepass/path-tampered.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/gatepass/tool-tampered.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/gatepass/widened.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["widened"]
+    },
+    {
+      "file": "fixtures/gatepass/expired.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["expired"]
+    },
+    {
+      "file": "fixtures/gatepass/witness-truncated.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["tampered"]
+    },
+    {
+      "file": "fixtures/gatepass/malformed.json",
+      "now": "2026-06-01T00:00:00Z",
+      "verdicts": ["malformed"]
     }
   ]
 }

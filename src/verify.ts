@@ -1,12 +1,8 @@
-import { verifyAction, isActionDocument } from "./formats/action.js";
-import { verifyAfr, isAfrDocument } from "./formats/afr.js";
-import { verifyHaps, isHapsDocument } from "./formats/haps.js";
-import { verifyKeel, isKeelDocument } from "./formats/keel.js";
+import { verifyAfr } from "./formats/afr.js";
+import { FORMAT_IDS, adapterById, adapters } from "./formats/registry.js";
 import { labelFor, resultBase } from "./result.js";
 import { DEFAULT_MAX_BYTES, isRecord, parseJson } from "./text.js";
-import type { FormatId, RecordResult, VerifyOptions, VerifyResult } from "./types.js";
-
-const FORMAT_IDS: readonly FormatId[] = ["keel-permit", "haps", "action-v1", "afr"];
+import type { RecordResult, VerifyOptions, VerifyResult } from "./types.js";
 
 /**
  * Verify receipt bytes. This function does not read the filesystem or the network.
@@ -68,23 +64,20 @@ function select(
 ): RecordResult[] {
   const chosen = format ?? "auto";
   if (chosen === "auto") {
-    if (parsed !== undefined && isActionDocument(parsed)) return verifyAction(parsed, options);
-    if (parsed !== undefined && isHapsDocument(parsed)) return verifyHaps(parsed, options);
-    if (parsed !== undefined && isAfrDocument(parsed)) return verifyAfr(parsed, text, options);
-    if (parsed !== undefined && isKeelDocument(parsed)) return verifyKeel(parsed, options);
+    if (parsed !== undefined) {
+      for (const adapter of adapters) {
+        if (adapter.detect(parsed, text)) return adapter.verify(parsed, text, options);
+      }
+    } else {
+      const ap2 = adapterById("ap2");
+      if (ap2?.detect(undefined, text)) return ap2.verify(undefined, text, options);
+    }
     if (isJsonl(text)) return verifyAfr(undefined, text, options);
     return [unsupported("format was not recognized. Refusing to guess.")];
   }
-  if (chosen === "action-v1") {
-    return verifyAction(parsed ?? {}, options);
-  }
-  if (chosen === "haps") {
-    return verifyHaps(parsed ?? {}, options);
-  }
-  if (chosen === "afr") {
-    return verifyAfr(parsed, text, options);
-  }
-  return verifyKeel(parsed ?? {}, options);
+  const adapter = adapterById(chosen);
+  if (!adapter) return [unsupported(`unsupported format ${chosen}`)];
+  return adapter.verify(parsed ?? {}, text, options);
 }
 
 function isJsonl(text: string): boolean {

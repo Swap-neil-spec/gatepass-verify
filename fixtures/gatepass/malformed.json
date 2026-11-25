@@ -1,0 +1,5 @@
+{
+  "profile": "gatepass-decision-record",
+  "id": "rec-bad",
+  "alg": "Ed25519"
+}
