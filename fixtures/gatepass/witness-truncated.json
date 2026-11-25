@@ -1,0 +1,82 @@
+{
+  "profile": "gatepass-decision-record",
+  "witness": {
+    "logId": "sample-log",
+    "length": 2,
+    "headHash": "5e0e094575801fecb7d43cd10700bb6bdad43f478a3dea81bf653fafc89418e8"
+  },
+  "records": [
+    {
+      "id": "rec-1",
+      "alg": "Ed25519",
+      "publicKey": "Vt8ZHbm0bgId_4rUlkB3atLl1JzjTdYWtcgunMN7z8k",
+      "issuedAt": "2026-06-01T00:00:00Z",
+      "expiresAt": "2026-12-01T00:00:00Z",
+      "approver": {
+        "id": "person-1"
+      },
+      "approved": {
+        "tool": "fs.write",
+        "argsHash": "579182b00c7c9448d3ddca968077475daa2f01f23a95ae93e837950bf86e39f2",
+        "resolvedPathHash": "b79c77c27270e85599562ea895d93531a1013a652dff6e3a6e6321097519294f",
+        "toolDefinitionHash": "ef392b4f0cb92429e466ff4e98f99bda8d6de5ae22075317e47b31579b487dae"
+      },
+      "executed": {
+        "tool": "fs.write",
+        "argsHash": "579182b00c7c9448d3ddca968077475daa2f01f23a95ae93e837950bf86e39f2",
+        "resolvedPathHash": "b79c77c27270e85599562ea895d93531a1013a652dff6e3a6e6321097519294f",
+        "toolDefinitionHash": "ef392b4f0cb92429e466ff4e98f99bda8d6de5ae22075317e47b31579b487dae",
+        "amount": 1000,
+        "currency": "USD",
+        "count": 1
+      },
+      "mandate": {
+        "id": "mandate-1",
+        "scopes": [
+          "fs.write"
+        ],
+        "caps": {
+          "amount": 5000,
+          "currency": "USD",
+          "count": 4
+        },
+        "expiresAt": "2026-12-01T00:00:00Z",
+        "publicKey": {
+          "kty": "EC",
+          "crv": "P-256",
+          "x": "RiTWpH3eYt08mDxW71gskKmWkJ0ojpCbQpU-w1NQ-vk",
+          "y": "J1LZEIoEjb98HlPoJQxglsiakLmaCknCwt6ThrKJAdM"
+        },
+        "clientDataJSON": "eyJ0eXBlIjoid2ViYXV0aG4uZ2V0IiwiY2hhbGxlbmdlIjoiX211ZzNHQjhFcDlEOGRjNmpNZnVXQXNOUmZ0ZU14RnFDdHV4b01kalUxSSIsIm9yaWdpbiI6Imh0dHBzOi8vZ2F0ZS5leGFtcGxlIn0",
+        "authenticatorData": "HJ5TRISLXnRkMWiuSwUxVd4DwwpKZ2haH_kEFSxSUUEFAAAAAQ",
+        "signature": "G4kyylsV8_Lf-hbsQ4ItJXl9oHGk13KP78qAOgw9wF59GuUF6UBcM02VEQGIx1P3vWcdN06TeD89S1FnJWLLRQ"
+      },
+      "materials": {
+        "approvedArgs": {
+          "path": "/tmp/sample.txt",
+          "bytes": 5
+        },
+        "executedArgs": {
+          "path": "/tmp/sample.txt",
+          "bytes": 5
+        },
+        "approvedPath": "/tmp/sample.txt",
+        "executedPath": "/tmp/sample.txt",
+        "approvedTool": {
+          "name": "fs.write",
+          "description": "Write one file"
+        },
+        "executedTool": {
+          "name": "fs.write",
+          "description": "Write one file"
+        }
+      },
+      "chain": {
+        "seq": 0,
+        "prev": "0000000000000000000000000000000000000000000000000000000000000000",
+        "hash": "df19cc643773cd6cd4e5a7895f8fe3a2ad2aca3d8576b976e620415be4605a95"
+      },
+      "signature": "TYUrCfIS_GqCgGMCKwHWQSN1maRc-B3-Yd_QOom2Iy3SS69-bshDumhuqmcQZA51CbX5N8eQ08Hbxs4cLteECg"
+    }
+  ]
+}

@@ -7,7 +7,14 @@ export type Verdict =
   | "expired"
   | "malformed";
 
-export type FormatId = "keel-permit" | "haps" | "action-v1" | "afr";
+export type FormatId =
+  | "keel-permit"
+  | "haps"
+  | "action-v1"
+  | "afr"
+  | "ap2"
+  | "verifiable-intent"
+  | "gatepass";
 
 export type FormatSelection = "auto" | FormatId;
 

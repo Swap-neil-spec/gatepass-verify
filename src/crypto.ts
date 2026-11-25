@@ -3,6 +3,7 @@ import {
   createPublicKey,
   timingSafeEqual,
   verify,
+  type JsonWebKey,
   type KeyObject,
 } from "node:crypto";
 
@@ -96,4 +97,64 @@ export function hexEqual(left: string, right: string): boolean {
 
 export function isLowerHex(value: string, chars: number): boolean {
   return new RegExp(`^[0-9a-f]{${chars}}$`).test(value);
+}
+
+/** P-256 public JWK. Only the public members are kept. */
+export interface EcJwk {
+  kty: "EC";
+  crv: "P-256";
+  x: string;
+  y: string;
+}
+
+export function isEcJwk(value: unknown): value is EcJwk {
+  if (typeof value !== "object" || value === null) return false;
+  const record = value as Record<string, unknown>;
+  return (
+    record["kty"] === "EC" &&
+    record["crv"] === "P-256" &&
+    typeof record["x"] === "string" &&
+    typeof record["y"] === "string" &&
+    record["x"].length > 0 &&
+    record["y"].length > 0
+  );
+}
+
+export function sha256Base64url(data: Uint8Array | string): string {
+  return base64urlEncode(sha256(data));
+}
+
+/** PEM SubjectPublicKeyInfo, or a JSON JWK, for a P-256 public key. */
+export function parseEcPublicKey(material: string): EcJwk | null {
+  const trimmed = material.trim();
+  if (trimmed.startsWith("{")) {
+    try {
+      const parsed: unknown = JSON.parse(trimmed);
+      if (!isEcJwk(parsed)) return null;
+      return { kty: "EC", crv: "P-256", x: parsed.x, y: parsed.y };
+    } catch {
+      return null;
+    }
+  }
+  if (trimmed.includes("BEGIN PUBLIC KEY")) {
+    try {
+      const exported = createPublicKey(trimmed).export({ format: "jwk" });
+      if (!isEcJwk(exported)) return null;
+      return { kty: "EC", crv: "P-256", x: exported.x, y: exported.y };
+    } catch {
+      return null;
+    }
+  }
+  return null;
+}
+
+/** ES256, raw R || S, as used by compact JWS (RFC 7518). */
+export function es256Verify(jwk: EcJwk, message: Uint8Array, signature: Uint8Array): boolean {
+  if (signature.length !== 64) return false;
+  try {
+    const key = createPublicKey({ key: jwk as JsonWebKey, format: "jwk" });
+    return verify("sha256", message, { key, dsaEncoding: "ieee-p1363" }, signature);
+  } catch {
+    return false;
+  }
 }

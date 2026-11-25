@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 
 const root = fileURLToPath(new URL("..", import.meta.url));
-const roots = ["src", "test", "bin", "scripts", "schema", "fixtures", ".github"].map((name) =>
+const roots = ["src", "test", "bin", "scripts", "schema", "fixtures", "docs", ".github"].map((name) =>
   join(root, name),
 );
 const banned = [

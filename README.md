@@ -14,7 +14,11 @@ To check your own file:
 
 ```bash
 npx gatepass-verify path/to/receipt.json
+npx gatepass-verify path/to/receipt.json --evidence
+npx gatepass-verify path/to/receipt.json --evidence --json
 ```
+
+`--evidence` prints what was approved, by whom, when, what ran, the verdict, and why. Add `--json` for the same bundle as JSON. The process still does not use the network.
 
 Pass `--now` when you want a chosen verification clock. For a file you pass yourself, the default clock is the machine clock. For `--sample`, the default is the fixed clock above, unless you pass `--now`.
 
@@ -26,7 +30,7 @@ An authorization receipt is only useful if anyone can check it later, without se
 
 A Keel child permit that is broader than its parent is `widened`. A broken hash, signature, or argument binding is `tampered`. A signed `permit.revoked` event that covers a permit or its parent is `revoked`. A record past its expiry at the verification clock is `expired`. Input this tool cannot parse, or a format it does not implement, is `malformed`. The process exits 0 only when every record is `valid`. Other verdicts exit 2 through 6, in the order listed under Exit codes. A rejected file exits 1.
 
-This package is a neutral verifier for the four published formats below. It does not yet verify GatePass Decision Records. Support for that format is planned for a later release.
+This package verifies the formats in the table below. Decision records use the profile documented in [docs/receipts.md](docs/receipts.md). Detail that does not fit this page, including what each parser refuses to treat as a pass, is in that file.
 
 ```mermaid
 flowchart TD
@@ -85,8 +89,11 @@ Interop below is experimental and implemented from the public spec. It is not a 
 | HAPS | `haps` | [iProov/HAPS](https://github.com/iProov/HAPS) experimental v0.4 | `intent_hash` over the supplied action intent (RFC 8785, SHA-256, base64url, `sha256:` prefix). The same check for `presentation_hash` when a signing view is supplied. `jti` is present. `aud` is present, and must match `--aud` when you pass it. `exp` against the verification clock. A changed action is `tampered`. An EdDSA compact JWS is checked only when you supply a public key. | Provider identity, biometric or liveness evidence, assurance policy, and single-use replay. Those need a provider, a factor, and stored `jti` state. No key means the provider signature is skipped and the result says so. Passing the hash does not show what a person saw. |
 | ACTION-v1 | `action-v1` | [ACTION-v1](https://github.com/Aqta-ai/attestation-spec/blob/main/spec/ACTION-v1.md), [aqta.ai/action-v1](https://aqta.ai/action-v1) | Field set, `outcome` of `ALLOWED` or `BLOCKED`, hash shape, UTF-16 policy order, timestamp offset, and the Ed25519 signature over the canonical payload using the embedded public key. When `args` is supplied, `args_hash` is recomputed. `--key action-v1=<path>` pins that key. | Whether the action ran. The `agent` string is caller-asserted. Without a pin, a passing signature only shows that the embedded key signed the bytes. The published vectors do not include argument preimages, so those files skip the preimage check. |
 | agent-flight-recorder | `afr` | [multiagent-flight-recorder](https://pypi.org/project/multiagent-flight-recorder/), [source](https://github.com/Mihirajmera/agent-flight-recorder) | Each JSONL entry's sequence, `prev` link, and SHA-256 over the canonical entry with `hash` and `sig` removed. Ed25519 signatures when `--key afr=<path>` is set. A hash or link break is `tampered`, and every later entry is `tampered`. A signed entry with no key is `malformed`. | Policy decisions, approval expiry, and OSCAL output. Truncation of a valid tail is not visible unless you keep the head elsewhere. This tool does not take an anchor. |
+| AP2 mandate | `ap2` | [Agent authorization](https://ap2-protocol.org/ap2/agent_authorization/), [payment mandate](https://ap2-protocol.org/ap2/payment_mandate/), [checkout mandate](https://ap2-protocol.org/ap2/checkout_mandate/), [RFC 9901](https://www.rfc-editor.org/rfc/rfc9901) | SD-JWT disclosure binding, ES256 hop signatures, `sd_hash` over the preceding hop, closed payment and checkout fields, published constraint types, exact `exp`, and a receipt reference when one is present. | Issuer JWKS and `x5c`. Cumulative budget and recurrence history. Decimal amount bounds. `checkout_jwt` merchant signatures. ISO mdoc. See [docs/receipts.md](docs/receipts.md). |
+| Verifiable Intent | `verifiable-intent` | [Credential format v0.1](https://verifiableintent.dev/spec/credential-format/), [constraints](https://verifiableintent.dev/spec/constraints/) | Layer signatures that can be checked offline, `sd_hash`, mandate pairing, delegation `kid`, machine-checked constraints, and `exp` with the stated 300 second skew. | Issuer JWKS. `checkout_jwt` merchant signatures. Cumulative spend, occurrence counts, and nonce replay. See [docs/receipts.md](docs/receipts.md). |
+| Decision record | `gatepass` | Profile `gatepass-decision-record` in [docs/receipts.md](docs/receipts.md) | Record signature, approved versus executed hashes, passkey or key mandate signature, scope and caps, chain links, and an in-file witness head. | A witness URL. Signature counters and attestation. Fields this tool does not know. A missing prefix of a chain whose head still matches. |
 
-Pass `--format` to force one parser. The default detects the format and refuses input it does not recognize.
+Pass `--format` to force one parser. The default detects the format and refuses input it does not recognize. `--evidence` prints the dispute bundle described above. The JSON form is schema `gatepass-verify.evidence.v1` in [schema/evidence.v1.json](schema/evidence.v1.json).
 
 ## JSON result
 
@@ -140,6 +147,8 @@ HAPS files under `fixtures/haps/published/` are the v0.4 canonicalization vector
 ACTION-v1 files under `fixtures/action/published/` are vectors from Aqta-ai/attestation-spec. `args-match.json` and `args-mismatch.json` are signed by the fixture key so the argument preimage can be checked.
 
 `fixtures/afr/published/flight.jsonl` and `flight-tampered.jsonl` are the sample log published with agent-flight-recorder, checked with the public key published beside that log.
+
+`fixtures/ap2/`, `fixtures/vi/`, and `fixtures/gatepass/` were written here from the public rules so the checks have something to run. They are not vendor test vectors. The signing keys are fixture keys. Do not use them for a real record. Rebuild them, after `npm run build`, with `npm run fixtures:mandates`.
 
 ## Limits
 

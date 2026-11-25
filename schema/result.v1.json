@@ -28,7 +28,7 @@
           "index": { "type": "integer", "minimum": 0 },
           "id": { "type": ["string", "null"] },
           "format": {
-            "enum": ["keel-permit", "haps", "action-v1", "afr", "unknown"]
+            "enum": ["keel-permit", "haps", "action-v1", "afr", "ap2", "verifiable-intent", "gatepass", "unknown"]
           },
           "verdict": {
             "enum": ["valid", "tampered", "revoked", "widened", "expired", "malformed"]
